@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
 #include "imdb.h"
 #include "path.h"
 using namespace std;

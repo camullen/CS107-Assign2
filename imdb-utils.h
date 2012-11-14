@@ -4,6 +4,10 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+
 using namespace std;
 
 /**
@@ -43,7 +47,7 @@ struct film {
   
   bool operator<(const film& rhs) const { 
     return this->title < rhs.title || 
-           this->title == rhs.title && this->year < rhs.year; 
+      (this->title == rhs.title && this->year < rhs.year); 
   }
 };
 
@@ -61,15 +65,25 @@ inline const char *determinePathToData(const char *userSelectedPath = NULL)
 {
   if (userSelectedPath != NULL) return userSelectedPath;
   
-  const char *ostype = getenv("OSTYPE");
-  if (strcasecmp(ostype, "linux") == 0)
-    return "/usr/class/cs107/assignments/assn-2-six-degrees-data/little-endian/";
-  if (strcasecmp(ostype, "solaris") == 0)
-    return "/usr/class/cs107/assignments/assn-2-six-degrees-data/big-endian/";
-  
-  cerr << "Unsupported OS... bailing" << endl;
-  exit(1);
-  return NULL;
+  //Check to see if running Windows - the directory slashes go the wrong way
+  //The environment variable OS contains the operating system type on windows machines
+  char* ostype = getenv("OS");
+  if(ostype != NULL){
+    //Convert the ostype variable to lowercase
+    char ostypeLocal[strlen(ostype) + 1]; 
+    strcpy(ostypeLocal, ostype);
+    for(size_t i = 0; i < strlen(ostypeLocal); i++)
+      ostypeLocal[i] = (char)tolower((int)ostypeLocal[i]);
+
+    //Check to see if the variable is windows
+    if(strstr("windows", ostypeLocal) != NULL)
+      return ".\\data\\little-endian\\";
+  }
+
+  int testNum = 57;
+  if(*(char*)&testNum == 57) 
+    return "./data/little-endian/";
+  else return "./data/big-endian/";
 }
 
 #endif
