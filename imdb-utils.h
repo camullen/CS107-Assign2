@@ -52,12 +52,11 @@ struct film {
 };
 
 /**
- * Quick, UNIX-dependent function to determine whether or not the
- * the resident OS is Linux or Solaris.  For our purposes, this
- * tells us whether the machine is big-endian or little-endian, and
- * the endiannees tells us which set of raw binary data files we should
- * be using.
- *
+ * Non-OS dependent function that gives the proper path to the binaries
+ * appropriate for the endianness of the system
+ * 
+ * Requires that the data files be stored in: ./data
+ * 
  * @return one of two data paths.
  */
 

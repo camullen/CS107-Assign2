@@ -9,6 +9,8 @@ using namespace std;
 class imdb {
   
  public:
+  static const int ACTOR = 1;
+  static const int MOVIE = 2;
   
   /**
    * Constructor: imdb
@@ -84,11 +86,14 @@ class imdb {
   ~imdb();
   
  private:
+
   static const char *const kActorFileName;
   static const char *const kMovieFileName;
   const void *actorFile;
   const void *movieFile;
   
+  static int* searchFile(const void* key, const void* file, int (*cmpr)(const void*, const void*));
+
   // everything below here is complicated and needn't be touched.
   // you're free to investigate, but you're on your own.
   struct fileInfo {
