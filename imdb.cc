@@ -32,8 +32,8 @@ fRecord getRecord(const void* file, size_t offset, int type){
   size_t padding;
 
   if(type == imdb::ACTOR){
-    if(nameLength % 2 == 1) padding = 2;
-    else padding = 1;
+    if(nameLength % 2 == 1) padding = 1;
+    else padding = 2;
   } else if(type == imdb::MOVIE){
     found.year = 1900 + *(name + nameLength + 1);
     if(nameLength % 2 == 1) padding = 3;
@@ -100,7 +100,7 @@ bool imdb::good() const
 
 // you should be implementing these two methods right here... 
 bool imdb::getCredits(const string& player, vector<film>& films) const { 
-  int* foundID = searchFile(&player, actorFile, compareActors);
+  int* foundID = searchFile(player.c_str(), actorFile, compareActors);
   if (foundID == NULL) return false;
   fRecord rec = getRecord(actorFile,*foundID, ACTOR);
   assert(strcmp(rec.name,player.c_str()) == 0);
