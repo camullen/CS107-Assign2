@@ -53,6 +53,52 @@ static string promptForActor(const string& prompt, const imdb& db)
  * @return 0 if the program ends normally, and undefined otherwise.
  */
 
+
+void printPath(path& p){
+
+}
+
+path getShortestPath(const string& startActor, const string& goalActor, imdb& db){
+  list<path> partialPaths = list<path>();
+  set<string> previouslySeenActors = set<string>();
+  set<film> previouslySeenFilms = set<film>();
+  path initialPath = path(startActor);
+  partialPaths.push_back(initialPath);
+  while(!partialPaths.empty() && partialPaths.front().getLength() <= 5) { //this should be checked
+    path thisPath = partialPaths.front();
+    partialPaths.pop_front();
+    string thisActor = thisPath.getLastPlayer();
+    vector<film> thisActorMovies = vector<film>();
+    db.getCredits(thisActor, thisActorMovies);
+    //need to do a check here to make sure that the start actor was foudn
+    for(unsigned int i = 0; i < thisActorMovies.size(); i++){
+      film currMovie = thisActorMovies[i];
+      if (previouslySeenFilms.insert(currMovie).second){
+	vector<string> otherActors = vector<string>();
+	db.getCast(currMovie, otherActors);
+	//need to do a check to make sure that the other movies work
+	for(unsigned int j= 0; j < otherActors.size(); j++){
+	  string otherActor = otherActors[j];
+	  if(previouslySeenActors.insert(otherActor).second){
+	    path newPath = thisPath; //not sure what type of copy to do here
+	    newPath.addConnection(currMovie, otherActor);
+	    if(otherActor == goalActor) { //not sure we can do equals here
+	      return newPath;
+	    } else {
+	      partialPaths.push_back(newPath);
+	    }
+
+	  }
+	}
+      }
+    }
+  }
+  path returnPath = path("");
+  return returnPath;
+}
+
+
+
 int main(int argc, const char *argv[])
 {
   imdb db(determinePathToData(argv[1])); // inlined in imdb-utils.h
@@ -70,8 +116,10 @@ int main(int argc, const char *argv[])
     if (source == target) {
       cout << "Good one.  This is only interesting if you specify two different people." << endl;
     } else {
-      // replace the following line by a call to your generateShortestPath routine... 
-      cout << endl << "No path between those two people could be found." << endl << endl;
+      path foundPath = getShortestPath(source,target,db);
+      if (foundPath.getLength() == 0 && foundPath.getLastPlayer() == "")
+	cout << endl << "No path between those two people could be found." << endl << endl;
+      else cout << foundPath << endl << endl;
     }
   }
   

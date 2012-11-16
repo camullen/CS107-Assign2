@@ -92,6 +92,13 @@ class imdb {
   const void *actorFile;
   const void *movieFile;
   
+  /**
+   * Method: searchFile
+   * ------------------
+   * A private helper method that searches a file given the appropriate bsearchKey
+   * 
+   *
+   */
   static int* searchFile(const void* key, const void* file, int (*cmpr)(const void*, const void*));
 
   // everything below here is complicated and needn't be touched.

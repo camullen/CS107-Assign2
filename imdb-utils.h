@@ -80,9 +80,9 @@ inline const char *determinePathToData(const char *userSelectedPath = NULL)
   }
 
   int testNum = 57;
-  if(*(char*)&testNum == 57) 
-    return "./data/little-endian/";
-  else return "./data/big-endian/";
+  if(*(char*)&testNum == 57)
+    return "./data/updated/little-endian/";
+  else return "./data/updated/big-endian/";
 }
 
 #endif
